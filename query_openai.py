@@ -1,7 +1,7 @@
 from openai_utils import *
 from flores200_utils import *
 import os
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 
 prompt_temp = 'Please provide the English translation for this sentence. Append the language code at the beginning and separate by a tab. For example, if I give you \"" \
               "language code: swh sentence: Unakuja lini?" \
@@ -28,7 +28,7 @@ async def gen():
         temperature=0.1, max_tokens=400, top_p=1,
         context_length= -1
     )
-    f = open("results.txt", "w")
+    f = open("flores_1_liner.en", "w")
     for line in responses:
         f.write(line+"\n")
     f.close()

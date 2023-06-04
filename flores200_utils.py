@@ -1,9 +1,5 @@
 import os
 
-# entries = os.listdir('data/flores200_dataset/devtest')
-# for entry in entries:
-#     print(entry)
-
 def load_test_set(name, number=None):
     f = open(name, 'r')
     lines =[line.strip() for line in f.readlines()]
@@ -27,6 +23,5 @@ def load_all_tests(test_dir, number=None):
 
 if __name__ == '__main__':
     test_dir= 'data/flores200_dataset/devtest'
-    print("here")
     test_data = load_all_tests(test_dir, 1)
     print(test_data)
