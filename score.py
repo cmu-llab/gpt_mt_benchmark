@@ -12,7 +12,7 @@ BLEURT_BATCH_SIZE = 64
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("res", type=str)
-    # parser.add_argument("ref", type=str)
+    parser.add_argument("--tokenizer", type=str, default="flores101")
     parser.add_argument("--no-lexical-metrics", action="store_true")
     parser.add_argument("--comet-dir", type=str, default=None)
     parser.add_argument("--bleurt-dir", type=str, default=None)
@@ -21,10 +21,6 @@ def main():
 
     args = parser.parse_args()
 
-    # # with open(args.hyp, encoding="utf-8") as hyp_f:
-    #     hyps = [line.strip() for line in hyp_f.readlines()]
-    # with open(args.ref, encoding="utf-8") as ref_f:
-    #     refs = [line.strip() for line in ref_f.readlines()]
     df = pd.read_csv(args.res, sep="\t")
     hyps = [str(line) for line in df["label"].tolist()]
     refs = [str(line) for line in df["predictions"].tolist()]
@@ -35,7 +31,7 @@ def main():
 
         # gets corpus-level non-ml evaluation metrics
         # corpus-level BLEU
-        tokenize = "spm"
+        tokenize = args.tokenizer
         try:
             print(sacrebleu.corpus_bleu(hyps, [refs], tokenize=tokenize).format())
         except:

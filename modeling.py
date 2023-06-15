@@ -1,5 +1,6 @@
 """Chatbots using API-based services."""
 from __future__ import annotations
+from flores200_utils import *
 
 import itertools
 import json
@@ -10,7 +11,7 @@ from typing import Literal
 
 import datasets
 
-from examples.chatbot import config as chatbot_config
+import config as chatbot_config
 from zeno_build.cache_utils import CacheLock, fail_cache, get_cache_path
 from zeno_build.models.chat_generate import generate_from_chat_prompt
 from zeno_build.prompts.chat_prompt import ChatMessages, ChatTurn
@@ -54,13 +55,19 @@ def build_examples_for_flores_test(
 ) -> Iterable[ChatMessages]:
     """Convert the data into ChatMessages."""
     messages = []
-    for content in  contents:
-        role = "user"
-        stripped_content = content.strip()
-        if len(stripped_content) == 0:
-            stripped_content = "..."
-        messages.append(ChatTurn(role=role, content=stripped_content))
-    return ChatMessages(messages=list(messages))
+    stripped_content = contents.strip()
+    if len(stripped_content) == 0:
+        stripped_content = "..."
+    yield ChatMessages(
+            messages=[
+                ChatTurn(
+                    role="user",
+                    content=stripped_content,
+                )
+            ],
+        )
+
+
 
 
 def process_data(
@@ -93,6 +100,7 @@ def process_data(
         The loaded dataset as dialog examples of context and reference.
     """
     # Load from cache and return if existing
+    labels=[]
     parameters = {k: v for k, v in locals().items() if k != "output_dir"}
     output_path = get_cache_path(output_dir, parameters, "jsonl")
     if os.path.exists(output_path):
@@ -103,9 +111,24 @@ def process_data(
     if isinstance(dataset, tuple):
         dname, subdname = dataset
         loaded_data = datasets.load_dataset(dname, subdname, split=split)
-    else:
+    elif data_format !="local":
         loaded_data = datasets.load_dataset(dataset, split=split)
-    if data_format == "sequence":
+    if data_format == "local":
+        loaded_data = load_few_shot_testset_all(dataset+"/inputs/", lang_code="")
+        data_list = []
+
+        for i in range(len(loaded_data)):
+            data_list.append(loaded_data[str(i)])
+        messages = list(
+            itertools.chain.from_iterable(
+                build_examples_for_flores_test(
+                    x,
+                )
+                for x in data_list
+            )
+        )
+
+    elif data_format == "sequence":
         messages = list(
             itertools.chain.from_iterable(
                 build_examples_from_sequence(x[data_column]) for x in loaded_data
@@ -125,6 +148,7 @@ def process_data(
                 for x in loaded_data
             )
         )
+
     elif data_format == "flores":
         messages = list(
             itertools.chain.from_iterable(
