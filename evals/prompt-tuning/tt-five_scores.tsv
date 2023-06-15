@@ -1,0 +1,4 @@
+	fra_Latn	zho_Hans	fin_Latn	tur_Latn	tgl_Latn	tam_Taml	swh_Latn	amh_Ethi	pap_Latn	lao_Laoo	luo_Latn	sat_Olck
+BLEU	54.28	28.51	34.64	42.81	36.43	14.86	38.75	5.87	34.31	5.68	5.05	3.16
+chrF2++	70.8	31.25	57.01	61.86	60.77	36.11	61.84	11.77	56.68	24.05	21.25	10.3
+TER	37.64	224.64	64.27	53.94	52.32	92.0	46.2	102.27	50.43	141.0	102.82	115.35
