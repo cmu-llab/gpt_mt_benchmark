@@ -113,7 +113,7 @@ def chatbot_main(
             )
         results: list[ExperimentRun] = []
 
-        dir = "tsv_results/" + split_folder[-2]
+        dir = "exp_outputs_tsv/" + split_folder[-2]
 
         try:
             os.makedirs(dir)
