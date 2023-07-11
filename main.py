@@ -21,9 +21,9 @@ from zeno_build.reporting.visualize import visualize
 
 from flores200_utils import *
 
-os.environ["OPENAI_API_KEY"] = ""
+os.environ["OPENAI_API_KEY"] = "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"
 os.environ[
-    'INSPIREDCO_API_KEY'] = ""
+    'INSPIREDCO_API_KEY'] = "wV5Zd8BKLCoW6HiJTrSNIlNpkrprlEOP_XW3TDV7ysIeOEl5RWAIFLM1pUAgZ_RT1gpqfc4TTe8NgyODb3YA7Q=="
 
 def chatbot_main(
         dataset: str,

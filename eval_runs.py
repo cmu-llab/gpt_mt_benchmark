@@ -12,23 +12,24 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--results_dir", type=str, required=True)
     parser.add_argument("--tokenizer", type=str, default="flores101")
+    parser.add_argument("--langs_file" , type=str , required=True)
     args = parser.parse_args()
     results_dir = args.results_dir
     tokenizer = args.tokenizer
 
-    langs = ["fra_Latn", "zho_Hans", "fin_Latn", "tur_Latn", "tgl_Latn", "tam_Taml", "swh_Latn", "amh_Ethi", "pap_Latn",
-             "lao_Laoo", "luo_Latn", "sat_Olck"]
+    langs = [line.strip() for line in open(args.langs_file, "r")]
     # prompt_datasets = ["tp3", "tt-zero", "tt-one", "tt-three", "tt-five"]
-    prompt_datasets = ["tt-zero", "tt-one", "tt-five"]
+    prompt_datasets = ["tt-zero"]
 
     name_prefix = "gpt-3.5-turbo tt-def temperature=0.3 context_length=-1"
 
     bleu_across_prompts = {}
+    spbleu200_across_prompts = {}
     chrf_across_prompts = {}
     ter_across_prompts = {}
     slr_across_prompts = {}
 
-    metrics_tuple = ((bleu_across_prompts, "BLEU"), (chrf_across_prompts, "chrF2++"), (ter_across_prompts, "TER"),
+    metrics_tuple = ((bleu_across_prompts, "BLEU"), (spbleu200_across_prompts, 'spBLEU200') ,(chrf_across_prompts, "chrF2++"), (ter_across_prompts, "TER"),
                      (slr_across_prompts, "SLR"))
 
     for lang in langs:
@@ -45,12 +46,14 @@ def main():
             out_file.close()
             output = open(temp_scores_fname, "r").read()
             bleu = float(output.split("BLEU = ")[1].split()[0])
+            spbleu200  = float(output.split("sp200BLEU = ")[1].split()[0])
             slr = float(output.split("ratio = ")[1].split()[0])
             chrf = float(output.split("chrF2++ = ")[1].split()[0])
             ter = float(output.split("TER = ")[1].split()[0])
 
-            results[lang] = {"BLEU": bleu, "chrF2++": chrf, "TER": ter, "SLR": slr}
+            results[lang] = {"BLEU": bleu, "spBLEU200" : spbleu200, "chrF2++": chrf, "TER": ter, "SLR": slr}
         df = pd.DataFrame(results)
+        df =df.T
         df.to_csv(prompt + "_scores.tsv", sep="\t")
 
         for metric in metrics_tuple:
