@@ -36,6 +36,10 @@ def main():
             print(sacrebleu.corpus_bleu(hyps, [refs], tokenize=tokenize).format())
         except:
             print("BLEU = -1")
+        try:
+            print("sp200"+sacrebleu.corpus_bleu(hyps, [refs], tokenize='flores200').format())
+        except:
+            print("spBLEU200 = -1")
         chrf = CHRF(word_order=2)
         try:
             print(chrf.corpus_score(hyps, [refs]))

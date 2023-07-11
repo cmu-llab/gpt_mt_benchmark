@@ -1,12 +1,15 @@
 #!/bin/bash
 
-langs=("fra_Latn" "zho_Hans" "fin_Latn" "tur_Latn" "tgl_Latn" "tam_Taml" "swh_Latn" "amh_Ethi" "pap_Latn" "lao_Laoo" "luo_Latn" "sat_Olck")
-prompt_datasets=("tp3" "tt-zero" "tt-one" "tt-three" "tt-five")
-
+prompt_datasets=("tt-zero")
+input_file=langs.txt
 for prompt in "${prompt_datasets[@]}"
 do
-    for lang in "${langs[@]}"
+    while IFS= read -r line; 
     do
-        python main.py --dataset "fewshot_texts/$prompt/$lang" --dataset_config_preset "local-${lang:0:3}"
-    done
+    # Remove the newline character from the line
+    	lang=$(echo "$line" | tr -d '\n')
+    # Do something with the line
+    	echo "Processing lang: $lang"
+        python main.py   --dataset "main_texts/$prompt/$lang" --dataset_config_preset "local-${lang:0:3}"
+    done< "$input_file"
 done
