@@ -2,3 +2,5 @@ zeno-build
 openai
 sacrebleu
 sentencepiece
+pandas
+numpy
