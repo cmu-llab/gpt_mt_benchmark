@@ -8,7 +8,7 @@ def load_few_shot_testset_all(testset_dir, lang_code=""):
     for entry in entries:
         f_name = os.path.join(testset_dir, entry)
         data = "".join(open(f_name, "r").readlines())
-        num = entry.split(".")[0][1:]
+        num = entry.split(".")[0][1:] #To ensure they are sorted. The files are like s0.txt, s1.txt, etc
         examples[num] = data
     return examples
 
@@ -40,6 +40,8 @@ def load_labels(dir):
     for i in range(len(loaded_labels)):
         labels.append(loaded_labels[str(i)])
     return labels
+
+
 if __name__ == '__main__':
     test_dir= 'data/flores200_dataset/devtest'
     test_data = load_all_tests(test_dir, 1)

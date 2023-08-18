@@ -3,7 +3,6 @@
 This file is intended to be modified. You can go in and change any
 of the variables to run different experiments.
 """
-# TODO create a map  of langcode to lang_name
 from __future__ import annotations
 
 import transformers

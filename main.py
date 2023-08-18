@@ -21,9 +21,9 @@ from zeno_build.reporting.visualize import visualize
 
 from flores200_utils import *
 
-os.environ["OPENAI_API_KEY"] = "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"
-os.environ[
-    'INSPIREDCO_API_KEY'] = "wV5Zd8BKLCoW6HiJTrSNIlNpkrprlEOP_XW3TDV7ysIeOEl5RWAIFLM1pUAgZ_RT1gpqfc4TTe8NgyODb3YA7Q=="
+os.environ["OPENAI_API_KEY"] = ""
+os.environ['INSPIREDCO_API_KEY'] = ""
+
 
 def chatbot_main(
         dataset: str,
@@ -37,22 +37,21 @@ def chatbot_main(
     dataset_preset = chatbot_config.space.dimensions["dataset_preset"]
     if not isinstance(dataset_preset, search_space.Constant):
         raise ValueError("All experiments must be run on a single dataset.")
-    # TODO: Changed this
     dataset_config = chatbot_config.dataset_configs[dataset_config_preset]
     print(chatbot_config.space.dimensions["prompt_preset"])
 
-
     # Define the directories for storing data and predictions
     data_dir = os.path.join(results_dir, "data")
-    split_folder = dataset.split("/")  # --dataset "fewshot_texts/tp3/swh_Latn
-
-    predictions_dir = os.path.join(results_dir, "predictions", split_folder[-2], split_folder[-1] )
+    split_folder = dataset.split("/")  # --dataset "fewshot_texts/tt-zero/eng_Latn
+    prompt = split_folder[-2]
+    lang = split_folder[-1]
+    predictions_dir = os.path.join(results_dir, "predictions", prompt, lang)
 
     # Load and standardize the format of the necessary data. The resulting
     # processed data will be stored in the `results_dir/data` directory
     # both for browsing and for caching for fast reloading on future runs.
     contexts_and_labels = process_data(
-        dataset=dataset, #TODO - changed from the original
+        dataset=dataset,  # TODO - changed from the original
         split=dataset_config.split,
         data_format=dataset_config.data_format,
         data_column=dataset_config.data_column,
@@ -65,9 +64,7 @@ def chatbot_main(
     for x in contexts_and_labels:
         contexts.append(x)
 
-    assert len(contexts) == len(labels)
-
-
+    assert len(contexts) == len(labels), "The contexts and labels should be the same length"
 
     if do_prediction:
         # Perform the hyperparameter sweep
@@ -96,10 +93,11 @@ def chatbot_main(
             if predictions is None:
                 print(f"*** Skipped run for {parameters=} ***")
                 continue
-            eval_result = optimizer.calculate_metric(contexts, labels, predictions)
-            print("*** Iteration complete. ***")
-            print(f"Parameters: {parameters}")
-            print(f"Eval: {eval_result}")
+            #Uncomment below to calculate metrics using zeno - takes some time.
+            # eval_result = optimizer.calculate_metric(contexts, labels, predictions)
+            # print("*** Iteration complete. ***")
+            # print(f"Parameters: {parameters}")
+            # print(f"Eval: {eval_result}")
             print("***************************")
 
     if do_visualization:
@@ -112,7 +110,7 @@ def chatbot_main(
             )
         results: list[ExperimentRun] = []
 
-        dir = "exp_outputs_tsv/" + split_folder[-2]
+        dir = "exp_outputs_tsv/" + prompt
 
         try:
             os.makedirs(dir)
@@ -128,22 +126,21 @@ def chatbot_main(
             name = reporting_utils.parameters_to_name(
                 loaded_parameters, chatbot_config.space
             )
-            name = name + "_"+ split_folder [-2] + "_"+  split_folder [-1]
+            name = name + "_" + prompt + "_" + lang
             print(name)
             results.append(
                 ExperimentRun(
                     parameters=loaded_parameters, predictions=predictions, name=name
                 )
             )
-            single_df = pd.DataFrame(
+            results_df = pd.DataFrame(
                 {
                     "messages": [[asdict(y) for y in x.messages] for x in contexts],
                     "label": labels,
                     "predictions": predictions
                 }
             )
-            single_df.to_csv(os.path.join(dir, name + ".tsv"), index=False, sep="\t")
-
+            results_df.to_csv(os.path.join(dir, name + ".tsv"), index=False, sep="\t")
 
 
 if __name__ == "__main__":
@@ -159,7 +156,7 @@ if __name__ == "__main__":
         "--dataset_config_preset",
         type=str,
         required=True,
-        help="The dataset preset name in the config file. Should be something like local-fra for local datasets",
+        help="The dataset preset name in the config file. Should be something like local-fls for local datasets",
     )
     parser.add_argument(
         "--results-dir",
@@ -185,7 +182,7 @@ if __name__ == "__main__":
         )
 
     chatbot_main(
-        dataset=args.dataset ,
+        dataset=args.dataset,
         dataset_config_preset=args.dataset_config_preset,
         results_dir=args.results_dir,
         do_prediction=not args.skip_prediction,

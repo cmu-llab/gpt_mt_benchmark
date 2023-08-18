@@ -46,7 +46,6 @@ dik_Latn
 dyu_Latn
 dzo_Tibt
 ell_Grek
-eng_Latn
 epo_Latn
 est_Latn
 eus_Latn

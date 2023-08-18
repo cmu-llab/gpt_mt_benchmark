@@ -34,9 +34,9 @@ def build_examples_from_sequence(seq: list[str]) -> Iterable[ChatMessages]:
 
 
 def build_examples_from_roles_and_contents(
-    roles: list[str],
-    contents: list[str],
-    name_mapping: dict[str, Literal["system", "assistant", "user"]],
+        roles: list[str],
+        contents: list[str],
+        name_mapping: dict[str, Literal["system", "assistant", "user"]],
 ) -> Iterable[ChatMessages]:
     """Convert a datapoint into dialog examples."""
     assert len(roles) == len(contents)
@@ -50,8 +50,9 @@ def build_examples_from_roles_and_contents(
         if role == "assistant":
             yield ChatMessages(messages=list(messages))
 
+
 def build_examples_for_flores_test(
-    contents: list[str],
+        contents: list[str],
 ) -> Iterable[ChatMessages]:
     """Convert the data into ChatMessages."""
     messages = []
@@ -59,23 +60,21 @@ def build_examples_for_flores_test(
     if len(stripped_content) == 0:
         stripped_content = "..."
     yield ChatMessages(
-            messages=[
-                ChatTurn(
-                    role="user",
-                    content=stripped_content,
-                )
-            ],
-        )
-
-
+        messages=[
+            ChatTurn(
+                role="user",
+                content=stripped_content,
+            )
+        ],
+    )
 
 
 def process_data(
-    dataset: str | tuple[str, str],
-    split: str,
-    data_format: str = "sequence",
-    data_column: str = "dialog",
-    output_dir: str = "results",
+        dataset: str | tuple[str, str],
+        split: str,
+        data_format: str = "sequence",
+        data_column: str = "dialog",
+        output_dir: str = "results",
 ) -> list[ChatMessages]:
     """Load data from the huggingface library.
 
@@ -100,7 +99,7 @@ def process_data(
         The loaded dataset as dialog examples of context and reference.
     """
     # Load from cache and return if existing
-    labels=[]
+    labels = []
     parameters = {k: v for k, v in locals().items() if k != "output_dir"}
     output_path = get_cache_path(output_dir, parameters, "jsonl")
     if os.path.exists(output_path):
@@ -111,10 +110,10 @@ def process_data(
     if isinstance(dataset, tuple):
         dname, subdname = dataset
         loaded_data = datasets.load_dataset(dname, subdname, split=split)
-    elif data_format !="local":
+    elif data_format != "local":
         loaded_data = datasets.load_dataset(dataset, split=split)
     if data_format == "local":
-        loaded_data = load_few_shot_testset_all(dataset+"/inputs/", lang_code="")
+        loaded_data = load_few_shot_testset_all(dataset + "/inputs/", lang_code="")
         data_list = []
 
         for i in range(len(loaded_data)):
@@ -171,15 +170,15 @@ def process_data(
 
 
 def make_predictions(
-    contexts: list[ChatMessages],
-    dataset_preset: str,
-    prompt_preset: str,
-    model_preset: str,
-    temperature: float = 0.3,
-    max_tokens: int = 100,
-    top_p: float = 1,
-    context_length: int = -1,
-    output_dir: str = "results",
+        contexts: list[ChatMessages],
+        dataset_preset: str,
+        prompt_preset: str,
+        model_preset: str,
+        temperature: float = 0.3,
+        max_tokens: int = 100,
+        top_p: float = 1,
+        context_length: int = -1,
+        output_dir: str = "results",
 ) -> list[str] | None:
     """Make predictions over a particular dataset.
 
@@ -227,6 +226,7 @@ def make_predictions(
                 max_tokens,
                 top_p,
                 context_length,
+                requests_per_minute=80
             )
         except Exception:
             tb = traceback.format_exc()
