@@ -3,7 +3,7 @@
 This file is intended to be modified. You can go in and change any
 of the variables to run different experiments.
 """
-#TODO create a map  of langcode to lang_name
+# TODO create a map  of langcode to lang_name
 from __future__ import annotations
 
 import transformers
@@ -52,191 +52,34 @@ num_trials = 1
 
 # The details of each dataset
 dataset_configs = {
-    "dstc11": DatasetConfig(
-        dataset="gneubig/dstc11",
-        split="validation",
-        data_column="turns",
-        data_format="dstc11",
-    ),
     "flores200": DatasetConfig(
         dataset=("facebook/flores", "swh_Latn-eng_Latn"),
         split="devtest",
         data_column="sentence_swh_Latn",
         data_format="flores",
     ),
-    "local-fra": DatasetConfig(
-        dataset="fra_Latn",
+    "local-fls": DatasetConfig(  # This is the format we use.
+        dataset="",
         split="devtest",
-        data_column="sentence_fra_Latn",
+        data_column="",  # not relevant as we have plain txt files as inputs
         data_format="local",
     ),
-    "local-swh": DatasetConfig(
-        dataset="swh_Latn",
-        split="devtest",
-        data_column="sentence_swh_Latn",
-        data_format="local",
-    ),
-    "local-fin": DatasetConfig(
-        dataset="fin_Latn",
-        split="devtest",
-        data_column="sentence_swa_Latn",
-        data_format="local",
-    ),
-    "local-amh": DatasetConfig(
-        dataset="amh_Ethi",
-        split="devtest",
-        data_column="sentence_amh_Latn",
-        data_format="local",
-    ),
-    "local-lao": DatasetConfig(
-        dataset="lao_Laoo",
-        split="devtest",
-        data_column="sentence_lao_Latn",
-        data_format="local",
-    ),
-    "local-luo": DatasetConfig(
-        dataset="luo_Latn",
-        split="devtest",
-        data_column="sentence_luo_Latn",
-        data_format="local",
-    ),
-    "local-pap": DatasetConfig(
-        dataset="pap_Latn",
-        split="devtest",
-        data_column="sentence_pap_Latn",
-        data_format="local",
-    ),
-    "local-tam": DatasetConfig(
-        dataset="tam_Taml",
-        split="devtest",
-        data_column="sentence_tam_Latn",
-        data_format="local",
-    ),
-    "local-tgl": DatasetConfig(
-        dataset="tgl_Latn",
-        split="devtest",
-        data_column="sentence_tgl_Latn",
-        data_format="local",
-    ),
-    "local-tur": DatasetConfig(
-        dataset="tur_Latn",
-        split="devtest",
-        data_column="sentence_tur_Latn",
-        data_format="local",
-    ),
-    "local-zho": DatasetConfig(
-        dataset="zho_Hans",
-        split="devtest",
-        data_column="sentence_zho_Hans",
-        data_format="local",
-    ),
-    "local-sat": DatasetConfig(
-        dataset="sat_Olck",
-        split="devtest",
-        data_column="sentence_sat_Latn",
-        data_format="local",
-    )
 }
 
 # The details of each model
 model_configs = {
     "text-davinci-003": LMConfig(provider="openai", model="text-davinci-003"),
     "gpt-3.5-turbo": LMConfig(provider="openai_chat", model="gpt-3.5-turbo"),
-    "cohere-command-xlarge": LMConfig(
-        provider="cohere", model="command-xlarge-nightly"
-    ),
-    "gpt2": LMConfig(
-        provider="huggingface",
-        model="gpt2",
-        model_cls=transformers.GPT2LMHeadModel,
-    ),
-    "gpt2-xl": LMConfig(
-        provider="huggingface",
-        model="gpt2-xl",
-        model_cls=transformers.GPT2LMHeadModel,
-    ),
-    "llama-7b": LMConfig(
-        provider="huggingface",
-        model="decapoda-research/llama-7b-hf",
-        tokenizer_cls=transformers.LlamaTokenizer,
-    ),
-    "llama-13b": LMConfig(
-        provider="huggingface",
-        model="decapoda-research/llama-13b-hf",
-        tokenizer_cls=transformers.LlamaTokenizer,
-    ),
-    "alpaca-7b": LMConfig(
-        provider="huggingface",
-        model="chavinlo/alpaca-native",
-    ),
-    "alpaca-13b": LMConfig(
-        provider="huggingface",
-        model="chavinlo/alpaca-13b",
-    ),
-    "vicuna-7b": LMConfig(
-        provider="huggingface",
-        model="eachadea/vicuna-7b-1.1",
-        name_replacements={
-            "system": "ASSISTANT",
-            "assistant": "ASSISTANT",
-            "user": "HUMAN",
-        },
-    ),
-    "vicuna-13b": LMConfig(
-        provider="huggingface",
-        model="eachadea/vicuna-13b-1.1",
-        name_replacements={
-            "system": "ASSISTANT",
-            "assistant": "ASSISTANT",
-            "user": "HUMAN",
-        },
-    ),
-    "mpt-7b-chat": LMConfig(
-        provider="huggingface",
-        model="mosaicml/mpt-7b-chat",
-        model_loader_kwargs={"trust_remote_code": True},
-    ),
+    "gpt-4": LMConfig(provider="openai_chat", model="gpt-4"),
 }
 
-# The details of the prompts
+# The details of the prompts - we incorporated the prompts with the dataset so we use the default which is just empty
 prompt_messages: dict[str, ChatMessages] = {
     "tt-def": ChatMessages(
         messages=[
             ChatTurn(
                 role="user",
                 content="",
-            ),
-        ]
-    ),
-    "tt-zero": ChatMessages(
-        messages=[
-            ChatTurn(
-                role="user",
-                content='',
-            ),
-        ]
-    ),
-    "tt-one": ChatMessages(
-        messages=[
-            ChatTurn(
-                role="user",
-                content='',
-            ),
-        ]
-    ),
-    "tt-three": ChatMessages(
-        messages=[
-            ChatTurn(
-                role="system",
-                content='',
-            ),
-        ]
-    ),
-    "tt-five": ChatMessages(
-        messages=[
-            ChatTurn(
-                role="system",
-                content='',
             ),
         ]
     ),
