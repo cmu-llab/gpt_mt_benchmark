@@ -15,7 +15,7 @@ We used _gpt-3.5-turbo-0613_  and *gpt-4-0613* in July and August 2023.
 Find instructions below on how to use our codebase.
 
 ### Outputs and inputs
-We release the outputs in the folder system_outputs. Each tsv contains 3 columns:
+The outputs and inputs from this work can be found [here]()(will be updated) . We  will release the outputs in a folder system_outputs.  Each tsv contains 3 columns:
 - messages : Contains the prompts
 - label : Is the reference
 - predictions : The predictions from Open AI.
