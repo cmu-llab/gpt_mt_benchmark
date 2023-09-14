@@ -6,11 +6,12 @@ Read more about it in the paper [to be updated]
 
 Also see our [Zeno browser](https://hub.zenoml.com/project/cabreraalex/GPT%20MT%20Benchmark), with interactive visualizations of our results.
 
-We have outputs for 3 systems:
-  - tt-zero (GPT-3.5-turbo): Zero-shot prompt
-  - tt-five (GPT-3.5-turbo): Five-shot prompt
-  - GPT-4-(On a subset of 20 languages)- Five shot prompt
-We also added NLLB outputs (it is our baseline) for comparison
+We have outputs for 5 systems:
+  - ChatGPT (0-shot prompts) (GPT-3.5-turbo): 203 target languages
+  - ChatGPT (5-shot prompts) (GPT-3.5-turbo): 203 target languages
+  - GPT-4 (5-shot prompts): 20 target languages
+  - NLLB-MOE: 201 target languages
+  - Google Translate: 115 target languages
   
 ## Reproducing the work
 We used _gpt-3.5-turbo-0613_  and *gpt-4-0613* in July and August 2023. 
@@ -43,3 +44,4 @@ We have a script `eval_runs.py` that handles evaluation for BLEU, chrF, SLR and 
 *zeno_browser.ipynb* - This notebook shows how to use the Zeno library to analyze the results from our experiments.
 
 ## License
+MIT
