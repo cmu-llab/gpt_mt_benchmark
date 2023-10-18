@@ -2,7 +2,7 @@
 ## Overview
 In this work, we investigate the translation capabilities of GPT models across 203 diverse languages from [FLORES 200 dataset](https://github.com/facebookresearch/flores/blob/main/flores200/README.md)
 
-Read more about it in the paper [to be updated]
+Read more about it in [our paper](https://arxiv.org/abs/2309.07423) (accepted to [WMT 2023](http://www2.statmt.org/wmt23/))
 
 Also see our [Zeno browser](https://hub.zenoml.com/project/cabreraalex/GPT%20MT%20Benchmark), with interactive visualizations of our results.
 
@@ -12,6 +12,8 @@ We have outputs for 5 systems:
   - GPT-4 (5-shot prompts): 20 target languages
   - NLLB-MOE: 201 target languages
   - Google Translate: 115 target languages
+
+All model outputs can be found on [Zenodo](https://zenodo.org/records/8286649)
   
 ## Reproducing the work
 We used _gpt-3.5-turbo-0613_  and *gpt-4-0613* in July and August 2023. 
