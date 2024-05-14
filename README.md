@@ -1,4 +1,7 @@
 # Benchmarking Large Language Models (GPT) for Machine Translation
+
+Software for: [ChatGPT MT: Competitive for High- (but Not Low-) Resource Languages](https://aclanthology.org/2023.wmt-1.40/) (WMT 2023)
+
 ## Overview
 In this work, we investigate the translation capabilities of GPT models across 203 diverse languages from [FLORES 200 dataset](https://github.com/facebookresearch/flores/blob/main/flores200/README.md)
 
@@ -44,6 +47,33 @@ We have a script `eval_runs.py` that handles evaluation for BLEU, chrF, SLR and 
 *langid_classifier.ipynb* - for classifying the langauge of the predictions
 
 *zeno_browser.ipynb* - This notebook shows how to use the Zeno library to analyze the results from our experiments.
+
+## Citation
+
+Please cite:
+
+```
+@inproceedings{robinson-etal-2023-chatgpt,
+    title = "{C}hat{GPT} {MT}: Competitive for High- (but Not Low-) Resource Languages",
+    author = "Robinson, Nathaniel  and
+      Ogayo, Perez  and
+      Mortensen, David R.  and
+      Neubig, Graham",
+    editor = "Koehn, Philipp  and
+      Haddow, Barry  and
+      Kocmi, Tom  and
+      Monz, Christof",
+    booktitle = "Proceedings of the Eighth Conference on Machine Translation",
+    month = dec,
+    year = "2023",
+    address = "Singapore",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.wmt-1.40",
+    doi = "10.18653/v1/2023.wmt-1.40",
+    pages = "392--418",
+    abstract = "Large language models (LLMs) implicitly learn to perform a range of language tasks, including machine translation (MT). Previous studies explore aspects of LLMs{'} MT capabilities. However, there exist a wide variety of languages for which recent LLM MT performance has never before been evaluated. Without published experimental evidence on the matter, it is difficult for speakers of the world{'}s diverse languages to know how and whether they can use LLMs for their languages. We present the first experimental evidence for an expansive set of 204 languages, along with MT cost analysis, using the FLORES-200 benchmark. Trends reveal that GPT models approach or exceed traditional MT model performance for some high-resource languages (HRLs) but consistently lag for low-resource languages (LRLs), under-performing traditional MT for 84.1{\%} of languages we covered. Our analysis reveals that a language{'}s resource level is the most important feature in determining ChatGPT{'}s relative ability to translate it, and suggests that ChatGPT is especially disadvantaged for LRLs and African languages.",
+}
+```
 
 ## License
 MIT
